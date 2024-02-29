@@ -6,6 +6,8 @@ jobs:
   build:
     runs-on: macos-14
     steps:
+      - uses: actions/checkout@main
+
       - name: Fetch Orion's latest commit
         env:
           GH_TOKEN: ${{ github.token }}
