@@ -1,10 +1,5 @@
 name: Makefile CI
 
-#on:
-#  push:
-#    branches: [ "main" ]
-#  pull_request:
-#    branches: [ "main" ]
 on: workflow_dispatch
     
 jobs:
@@ -44,8 +39,9 @@ jobs:
       - name: Build Tweak
         run: |
           brew install make ldid
-          THEOS=theos gmake package TARGET="iphone:clang:15.6:15.6" FINALPACKAGE=1
-          THEOS=theos gmake package TARGET="iphone:clang:15.6:15.6" FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          export THEOS=theos
+          THEOS=theos gmake package TARGET="iphone:clang:15.6:15.0" FINALPACKAGE=1
+          THEOS=theos gmake package TARGET="iphone:clang:15.6:15.0" FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3
