@@ -1,0 +1,52 @@
+name: Makefile CI
+
+#on:
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
+    
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - name: Fetch Orion's latest commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          latest_commit=$(gh api -H 'Accept: application/vnd.github.sha' \
+          /repos/theos/orion/commits/master); echo "latest_commit=$latest_commit" >> $GITHUB_OUTPUT
+        id: commit
+
+      - uses: actions/cache@v4
+        id: cache-theos
+        with:
+          path: ${{ github.workspace }}/theos
+          key: steps.commit.outputs.latest_commit
+
+      - name: Checkout theos/theos
+        if: steps.cache-theos.outputs.cache-hit != 'true'
+        uses: actions/checkout@main
+        with:
+          repository: theos/theos
+          ref: master
+          submodules: recursive
+          path: theos
+      - name: Checkout theos/sdks
+        uses: actions/checkout@main
+        with:
+          repository: theos/sdks
+          ref: master
+          sparse-checkout: iPhoneOS15.6.sdk
+          path: theos/sdks
+
+      - name: Build Tweak
+        run: |
+          brew install make ldid
+          THEOS=theos gmake clean package TARGET="iphone:clang:15.6:15.6" FINALPACKAGE=1
+          THEOS=theos gmake clean package TARGET="iphone:clang:15.6:15.6" FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: packages/*.deb
