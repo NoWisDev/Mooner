@@ -15,6 +15,7 @@ class iOS_LSTimeHook : ClassHook<UIView> {
     func didMoveToWindow() {
         orig.didMoveToWindow()
         target.isHidden = true
+
     }
 }
 
@@ -32,6 +33,7 @@ class iOS_LSTimeViewControllerHook : ClassHook<UIViewController> {
         MyTimeViewUHC.view.translatesAutoresizingMaskIntoConstraints = false;
         target.addChild(MyTimeViewUHC)
         target.view.addSubview(MyTimeViewUHC.view)
+        MyTimeViewUHC.view.isUserInteractionEnabled = false
         MyTimeViewUHC.view.topAnchor.constraint(equalTo: target.view.topAnchor).isActive = true
         MyTimeViewUHC.view.leadingAnchor.constraint(equalTo: target.view.leadingAnchor).isActive = true
         MyTimeViewUHC.view.trailingAnchor.constraint(equalTo: target.view.trailingAnchor).isActive = true
