@@ -3,19 +3,36 @@ import MoonerC
 import UIKit
 import SwiftUI
 
-class iOS_LSTimeHook : ClassHook<UIView> {
-    static var targetName: String {
+struct iOS16Features: HookGroup {}
+struct iOS15Features: HookGroup {}
+
+struct Mooner: Tweak {
+    init() {
         if #available(iOS 16, *) {
-            return "BSUIVibrancyEffectView"
+            iOS16Features().activate()
         } else {
-            return "SBFLockScreenDateView"
+            iOS15Features().activate()
         }
     }
+}
+
+class iOS16_LSTimeHook : ClassHook<UIView> {
+    typealias Group = iOS16Features
+    static let targetName = "CSProminentDisplayView"
+
+    func didMoveToWindow() {
+        orig.didMoveToWindow()
+        target.subviews[1].isHidden = true
+    }
+}
+
+class iOS15_LSTimeHook : ClassHook<UIView> {
+    typealias Group = iOS15Features
+    static let targetName = "SBFLockScreenDateView"
 
     func didMoveToWindow() {
         orig.didMoveToWindow()
         target.isHidden = true
-
     }
 }
 

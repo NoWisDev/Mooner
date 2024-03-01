@@ -3,17 +3,21 @@
 #import <UIKit/UIView.h>
 #import <SwiftUI/SwiftUI.h>
 #import <SpringBoard/SpringBoard.h>
+#include <RemoteLog.h>
 
-@interface SBFLockScreenDateView : UIView
-@end
-@interface SBFLockScreenDateViewController : UIViewController
-@end
-@interface BSUIVibrancyEffectView : UIView
+@interface CSProminentDisplayView : UIView
+@property NSArray *subviews;
 @end
 @interface CSProminentDisplayViewController : UIViewController
 @end
-@interface UIViewController (Private)
-- (BOOL)_canShowWhileLocked;
+@interface BSUIVibrancyEffectView : UIView
+@end
+
+@interface SBFLockScreenDateView : UIView
 @end
 @interface CSCombinedListViewController : UIViewController
+@end
+
+@interface UIViewController (Private)
+- (BOOL)_canShowWhileLocked;
 @end
