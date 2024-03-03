@@ -1,0 +1,4 @@
+module moonerC {
+    umbrella "."
+    export *
+}

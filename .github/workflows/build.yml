@@ -42,7 +42,6 @@ jobs:
         run: |
           brew install make ldid
           export THEOS=theos
-          THEOS=theos gmake package TARGET="iphone:clang:15.6:15.0" FINALPACKAGE=1
           THEOS=theos gmake package TARGET="iphone:clang:15.6:15.0" FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
 
       - name: Upload a Build Artifact

@@ -11,3 +11,5 @@ Mooner_SWIFTFLAGS = -ISources/MoonerC/include
 Mooner_CFLAGS = -fobjc-arc -ISources/MoonerC/include
 
 include $(THEOS_MAKE_PATH)/tweak.mk
+SUBPROJECTS += mooner
+include $(THEOS_MAKE_PATH)/aggregate.mk

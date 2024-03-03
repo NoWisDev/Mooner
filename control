@@ -6,4 +6,4 @@ Description: The moon moons on you from its perch in the night sky...
 Maintainer: NoW
 Author: NoW
 Section: Tweaks
-Depends: ${ORION}, firmware (>= 12.2)
+Depends: ${ORION}, firmware (>= 12.2), preferenceloader

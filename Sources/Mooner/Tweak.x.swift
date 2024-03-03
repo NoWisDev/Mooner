@@ -3,18 +3,16 @@ import MoonerC
 import UIKit
 import SwiftUI
 
+var isTweakEnabled: Bool?
+var lockscreenAlignment: Int?
+var isDayNightIconEnabled: Bool?
+var isShowAMPMEnabled: Bool?
+var userTimeFormat: String?
+var userDateFormat: String?
+
 struct iOS16Features: HookGroup {}
 struct iOS15Features: HookGroup {}
-
-struct Mooner: Tweak {
-    init() {
-        if #available(iOS 16, *) {
-            iOS16Features().activate()
-        } else {
-            iOS15Features().activate()
-        }
-    }
-}
+struct VersionNeutralFeatures: HookGroup {}
 
 class iOS16_LSTimeHook : ClassHook<UIView> {
     typealias Group = iOS16Features
@@ -37,6 +35,7 @@ class iOS15_LSTimeHook : ClassHook<UIView> {
 }
 
 class iOS_LSTimeViewControllerHook : ClassHook<UIViewController> {
+    typealias Group = VersionNeutralFeatures
     static var targetName: String {
         if #available(iOS 16, *) {
             return "CSProminentDisplayViewController"
@@ -58,5 +57,30 @@ class iOS_LSTimeViewControllerHook : ClassHook<UIViewController> {
         MyTimeViewUHC.view.isOpaque = false
         MyTimeViewUHC.view.backgroundColor = UIColor.clear
         orig.viewDidLoad()
+    }
+}
+
+func preferencesChanged() {
+    let prefs = UserDefaults(suiteName: "com.now.moonerprefs")
+        isTweakEnabled = (prefs?.object(forKey: "isTweakEnabled") as? Bool) ?? true
+        lockscreenAlignment = (prefs?.object(forKey: "lockscreenAlignment") as? Int) ?? 0
+        isDayNightIconEnabled = (prefs?.object(forKey: "isDayNightIconEnabled") as? Bool) ?? false
+        isShowAMPMEnabled = (prefs?.object(forKey: "isShowAMPMEnabled") as? Bool) ?? true
+        userTimeFormat = (prefs?.object(forKey: "userTimeFormat") as? String) ?? "hh:mm"
+        userDateFormat = (prefs?.object(forKey: "userTDateFormat") as? String) ?? "MMMM d, EEEE"
+}
+
+struct Mooner: Tweak {
+    init() {
+        preferencesChanged()
+        
+        if isTweakEnabled == true {
+            if #available(iOS 16, *) {
+                iOS16Features().activate()
+            } else {
+                iOS15Features().activate()
+            }
+            VersionNeutralFeatures().activate()
+        }
     }
 }

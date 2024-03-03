@@ -3,7 +3,6 @@
 #import <UIKit/UIView.h>
 #import <SwiftUI/SwiftUI.h>
 #import <SpringBoard/SpringBoard.h>
-#include <RemoteLog.h>
 
 @interface CSProminentDisplayView : UIView
 @property NSArray *subviews;

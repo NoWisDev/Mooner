@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>isTweakEnabled</string>
+			<key>label</key>
+			<string>Enable Mooner</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.now.moonerprefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Choose your alignment</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSegmentCell</string>
+			<key>key</key>
+			<string>lockscreenAlignment</string>
+			<key>label</key>
+			<string>Alignment</string>
+			<key>validTitles</key>
+			<array>
+				<string>Left</string>
+				<string>Center</string>
+				<string>Right</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+			</array>
+			<key>default</key>
+			<integer>0</integer>
+			<key>defaults</key>
+			<string>com.now.moonerprefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>isDayNightIconEnabled</string>
+			<key>label</key>
+			<string>Show Day/Night Icon</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.now.moonerprefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>isShowAMPMEnabled</string>
+			<key>label</key>
+			<string>Show AM/PM Text</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.now.moonerprefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSEditTextCell</string>
+			<key>key</key>
+			<key>userTimeFormat</key>
+			<key>label</key>
+			<string>Time Format:</string>
+			<key>default</key>
+			<string>hh:mm</string>
+			<key>defaults</key>
+			<string>com.now.moonerprefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSEditTextCell</string>
+			<key>key</key>
+			<key>userDateFormat</key>
+			<key>label</key>
+			<string>Date Format:</string>
+			<key>default</key>
+			<string>MMMM d, EEEE</string>
+			<key>defaults</key>
+			<string>com.now.moonerprefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGiantCell</string>
+			<key>label</key>
+			<string>Reset Preferences</string>
+			<key>action</key>
+			<string>resetSettings</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGiantCell</string>
+			<key>label</key>
+			<string>Respring</string>
+			<key>action</key>
+			<string>respring</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>Mooner</string>
+</dict>
+</plist>
