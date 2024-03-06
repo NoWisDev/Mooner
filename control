@@ -1,9 +1,10 @@
 Package: com.now.mooner
 Name: Mooner
-Version: 1.0
+Version: 1.0.1
 Architecture: iphoneos-arm
 Description: The moon moons on you from its perch in the night sky...
 Maintainer: NoW
 Author: NoW
 Section: Tweaks
 Depends: ${ORION}, firmware (>= 12.2), preferenceloader
+Icon: https://nowisdev.github.io/icons/Mooner.png

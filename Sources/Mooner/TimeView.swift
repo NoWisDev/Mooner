@@ -53,9 +53,10 @@ struct TimeView: View {
     let secondaryColor = Color(red:0.85, green:0.85, blue:0.85)
     let secondaryOpacity = 0.9
     let secondaryBlur: Material = .thickMaterial
+    @State var islsMainView = isLSMainView
 
     var body: some View {
-        if isLSMainView == true {
+        if islsMainView == true {
             let (LongDate, Time, AMPM) = formatDate(pointInTime: date)
             let lsAlignment: HorizontalAlignment = {
                 if lockscreenAlignment == 0 {
