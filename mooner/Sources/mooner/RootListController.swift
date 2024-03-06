@@ -1,4 +1,5 @@
 import Preferences
+import UIKit
 import moonerC
 import Foundation
 
@@ -24,6 +25,11 @@ class RootListController: PSListController {
     }
     @objc func resetSettings() {
         UserDefaults(suiteName: "com.now.moonerprefs")?.removePersistentDomain(forName: "com.now.moonerprefs")
+        reload()
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Apply", style: .plain, target: self, action: #selector(respring))
     }
 }
-

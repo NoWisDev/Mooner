@@ -4,6 +4,7 @@ import MoonerC
 
 class BatteryLevelDetector: ObservableObject {
     @Published var batteryLevel: Int = 0
+    @Published var isScreenLocked = false
     init() {
         UIDevice.current.isBatteryMonitoringEnabled = true
         self.batteryLevel = Int(UIDevice.current.batteryLevel * 100)
@@ -54,72 +55,74 @@ struct TimeView: View {
     let secondaryBlur: Material = .thickMaterial
 
     var body: some View {
-        let (LongDate, Time, AMPM) = formatDate(pointInTime: date)
-        let lsAlignment: HorizontalAlignment = {
-            if lockscreenAlignment == 0 {
-                return .leading
-            } else if lockscreenAlignment == 1 {
-                return .center
-            } else {
-                return .trailing
-            }
-        }()
-
-        HStack {
-            if lockscreenAlignment == 2 {
-                Spacer()
-            }
-            VStack(alignment: lsAlignment) {
-                if isDayNightIconEnabled == false {
-                    Text("\(LongDate)")
-                        .font(.system(size: 25, weight: .semibold, design: .rounded))
-                        .opacity(secondaryOpacity)
-                        .foregroundColor(secondaryColor)
-                        .foregroundStyle(secondaryBlur)
-                } else if lockscreenAlignment != 2 {
-                    Text("\(LongDate) \(Image(systemName: "sun.max.fill"))")
-                        .font(.system(size: 25, weight: .semibold, design: .rounded))
-                        .opacity(secondaryOpacity)
-                        .foregroundColor(secondaryColor)
-                        .foregroundStyle(secondaryBlur)
+        if isLSMainView == true {
+            let (LongDate, Time, AMPM) = formatDate(pointInTime: date)
+            let lsAlignment: HorizontalAlignment = {
+                if lockscreenAlignment == 0 {
+                    return .leading
+                } else if lockscreenAlignment == 1 {
+                    return .center
                 } else {
-                    Text("\(Image(systemName: "sun.max.fill")) \(LongDate)")
-                    .font(.system(size: 25, weight: .semibold, design: .rounded))
-                    .opacity(secondaryOpacity)
-                    .foregroundColor(secondaryColor)
-                    .foregroundStyle(secondaryBlur)
+                    return .trailing
                 }
-                HStack(alignment: .lastTextBaseline) {
-                    if lockscreenAlignment != 2 {
-                        Text("\(Time)")
-                            .font(.system(size: 60, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                    }
-                    Text("\(AMPM)")
-                        .font(.system(size: 35, weight: .semibold, design: .rounded))
+            }()
+
+            HStack {
+                if lockscreenAlignment == 2 {
+                    Spacer()
+                }
+                VStack(alignment: lsAlignment) {
+                    if isDayNightIconEnabled == false {
+                        Text("\(LongDate)")
+                            .font(.system(size: 25, weight: .semibold, design: .rounded))
+                            .opacity(secondaryOpacity)
+                            .foregroundColor(secondaryColor)
+                            .foregroundStyle(secondaryBlur)
+                    } else if lockscreenAlignment != 2 {
+                        Text("\(LongDate) \(Image(systemName: "sun.max.fill"))")
+                            .font(.system(size: 25, weight: .semibold, design: .rounded))
+                            .opacity(secondaryOpacity)
+                            .foregroundColor(secondaryColor)
+                            .foregroundStyle(secondaryBlur)
+                    } else {
+                        Text("\(Image(systemName: "sun.max.fill")) \(LongDate)")
+                        .font(.system(size: 25, weight: .semibold, design: .rounded))
                         .opacity(secondaryOpacity)
                         .foregroundColor(secondaryColor)
                         .foregroundStyle(secondaryBlur)
-                    if lockscreenAlignment == 2 {
-                        Text("\(Time)")
-                            .font(.system(size: 60, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
                     }
-                    
+                    HStack(alignment: .lastTextBaseline) {
+                        if lockscreenAlignment != 2 {
+                            Text("\(Time)")
+                                .font(.system(size: 60, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                        }
+                        Text("\(AMPM)")
+                            .font(.system(size: 35, weight: .semibold, design: .rounded))
+                            .opacity(secondaryOpacity)
+                            .foregroundColor(secondaryColor)
+                            .foregroundStyle(secondaryBlur)
+                        if lockscreenAlignment == 2 {
+                            Text("\(Time)")
+                                .font(.system(size: 60, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                        }
+                        
+                    }
+                    Text("Battery Percentage: \(batteryLevelDetector.batteryLevel)%")
+                        .font(.system(size: 25, weight: .semibold, design: .rounded))
+                        .opacity(secondaryOpacity)
+                        .foregroundColor(secondaryColor)
+                        .foregroundStyle(secondaryBlur)
+                    Spacer()
                 }
-                Text("Battery Percentage: \(batteryLevelDetector.batteryLevel)%")
-                    .font(.system(size: 25, weight: .semibold, design: .rounded))
-                    .opacity(secondaryOpacity)
-                    .foregroundColor(secondaryColor)
-                    .foregroundStyle(secondaryBlur)
-                Spacer()
+                .padding(.top, 30)
+                .padding(.horizontal, 15)
+                if lockscreenAlignment == 0 {
+                    Spacer()
+                }
             }
-            .padding(.top, 30)
-            .padding(.horizontal, 15)
-            if lockscreenAlignment == 0 {
-                Spacer()
-            }
+            .environment(\.layoutDirection, .leftToRight)
         }
-        .environment(\.layoutDirection, .leftToRight)
     }
 }

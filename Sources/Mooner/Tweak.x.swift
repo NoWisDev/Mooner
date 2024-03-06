@@ -7,8 +7,12 @@ var isTweakEnabled: Bool?
 var lockscreenAlignment: Int?
 var isDayNightIconEnabled: Bool?
 var isShowAMPMEnabled: Bool?
+var isHideProudLockEnabled: Bool?
+var isHidePageDotsEnabled: Bool?
 var userTimeFormat: String?
 var userDateFormat: String?
+
+var isLSMainView = true
 
 struct iOS16Features: HookGroup {}
 struct iOS15Features: HookGroup {}
@@ -34,6 +38,26 @@ class iOS15_LSTimeHook : ClassHook<UIView> {
     }
 }
 
+class ProudLockHook : ClassHook<UIView> {
+    typealias Group = VersionNeutralFeatures
+    static let targetName = "SBUIProudLockIconView"
+
+    func didMoveToWindow() {
+        orig.didMoveToWindow()
+        target.isHidden = isHideProudLockEnabled!
+    }
+}
+
+class LSPageDotsHook : ClassHook<UIView> {
+    typealias Group = VersionNeutralFeatures
+    static let targetName = "CSPageControl"
+
+    func didMoveToWindow() {
+        orig.didMoveToWindow()
+        target.isHidden = isHidePageDotsEnabled!
+    }
+}
+
 class iOS_LSTimeViewControllerHook : ClassHook<UIViewController> {
     typealias Group = VersionNeutralFeatures
     static var targetName: String {
@@ -42,6 +66,14 @@ class iOS_LSTimeViewControllerHook : ClassHook<UIViewController> {
         } else {
             return "CSCombinedListViewController"
         }
+    }
+    func viewDidAppear(_ animated: Bool) {
+        orig.viewDidAppear(animated)
+        isLSMainView = true
+    }
+    func viewDidDisappear(_ animated: Bool) {
+        orig.viewDidDisappear(animated)
+        isLSMainView = false
     }
 
     private let MyTimeViewUHC = TimeViewUIHostingController(rootView: RootTimelineView())
@@ -66,8 +98,10 @@ func preferencesChanged() {
         lockscreenAlignment = (prefs?.object(forKey: "lockscreenAlignment") as? Int) ?? 0
         isDayNightIconEnabled = (prefs?.object(forKey: "isDayNightIconEnabled") as? Bool) ?? false
         isShowAMPMEnabled = (prefs?.object(forKey: "isShowAMPMEnabled") as? Bool) ?? true
+        isHideProudLockEnabled = (prefs?.object(forKey: "isHideProudLockEnabled") as? Bool) ?? false
+        isHidePageDotsEnabled = (prefs?.object(forKey: "isHidePageDotsEnabled") as? Bool) ?? false
         userTimeFormat = (prefs?.object(forKey: "userTimeFormat") as? String) ?? "hh:mm"
-        userDateFormat = (prefs?.object(forKey: "userTDateFormat") as? String) ?? "MMMM d, EEEE"
+        userDateFormat = (prefs?.object(forKey: "userDateFormat") as? String) ?? "MMMM d, EEEE"
 }
 
 struct Mooner: Tweak {

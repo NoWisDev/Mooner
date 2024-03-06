@@ -6,6 +6,36 @@
 	<array>
 		<dict>
 			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Credits</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSStaticTextCell</string>
+			<key>label</key>
+			<string> NoW – Tweak Developer</string>
+			<key>hasIcon</key>
+			<true/>
+			<key>icon</key>
+			<string>nowicon.png</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSStaticTextCell</string>
+			<key>label</key>
+			<string> thecat(pou) – Icon Designer</string>
+			<key>hasIcon</key>
+			<true/>
+			<key>icon</key>
+			<string>thecaticon.png</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>key</key>
 			<string>isTweakEnabled</string>
@@ -72,6 +102,30 @@
 		</dict>
 		<dict>
 			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>isHideProudLockEnabled</string>
+			<key>label</key>
+			<string>Hide Lock Icon</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.now.moonerprefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>key</key>
+			<string>isHidePageDotsEnabled</string>
+			<key>label</key>
+			<string>Hide Page Dots</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.now.moonerprefs</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSEditTextCell</string>
 			<key>key</key>
 			<key>userTimeFormat</key>
@@ -101,20 +155,6 @@
 			<string>Reset Preferences</string>
 			<key>action</key>
 			<string>resetSettings</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>label</key>
-			<string></string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGiantCell</string>
-			<key>label</key>
-			<string>Respring</string>
-			<key>action</key>
-			<string>respring</string>
 		</dict>
 	</array>
 	<key>title</key>

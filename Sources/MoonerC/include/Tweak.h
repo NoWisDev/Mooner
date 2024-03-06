@@ -1,4 +1,5 @@
 #import <UIKit/UIKit.h>
+#include <objc/NSObject.h>
 #include <UIKit/UIViewController.h>
 #import <UIKit/UIView.h>
 #import <SwiftUI/SwiftUI.h>
@@ -19,4 +20,10 @@
 
 @interface UIViewController (Private)
 - (BOOL)_canShowWhileLocked;
+@end
+
+@interface SBUIProudLockIconView : UIView
+@end
+
+@interface CSPageControl : UIView
 @end
