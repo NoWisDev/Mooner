@@ -1,8 +1,8 @@
 Package: com.now.mooner
 Name: Mooner
-Version: 1.0.1
+Version: 1.0.2
 Architecture: iphoneos-arm
-Description: The moon moons on you from its perch in the night sky...
+Description: A free, simple, and modern iOS 15-16 LS customizer!
 Maintainer: NoW
 Author: NoW
 Section: Tweaks
