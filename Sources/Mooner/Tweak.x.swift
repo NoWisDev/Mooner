@@ -1,8 +1,8 @@
 import Orion
-import MoonerC
-import UIKit
 import SwiftUI
+import MoonerC
 
+// preference vars
 var isTweakEnabled: Bool?
 var lockscreenAlignment: Int?
 var isDayNightIconEnabled: Bool?
@@ -12,7 +12,10 @@ var isHidePageDotsEnabled: Bool?
 var userTimeFormat: String?
 var userDateFormat: String?
 
+// variable that contains the visibility of the lockscreen
 var isLSMainView = true
+
+// Hooks & Stuff
 
 struct iOS16Features: HookGroup {}
 struct iOS15Features: HookGroup {}
@@ -92,6 +95,7 @@ class iOS_LSTimeViewControllerHook : ClassHook<UIViewController> {
     }
 }
 
+// Preference updates and initializer
 func preferencesChanged() {
     let prefs = UserDefaults(suiteName: "com.now.moonerprefs")
         isTweakEnabled = (prefs?.object(forKey: "isTweakEnabled") as? Bool) ?? true

@@ -1,29 +1,27 @@
 #import <UIKit/UIKit.h>
-#include <objc/NSObject.h>
-#include <UIKit/UIViewController.h>
-#import <UIKit/UIView.h>
-#import <SwiftUI/SwiftUI.h>
-#import <SpringBoard/SpringBoard.h>
 
+// iOS 16 Lockscreen interfacing
 @interface CSProminentDisplayView : UIView
 @property NSArray *subviews;
 @end
+
 @interface CSProminentDisplayViewController : UIViewController
 @end
-@interface BSUIVibrancyEffectView : UIView
-@end
 
+// iOS 15 Lockscreen interfacing
 @interface SBFLockScreenDateView : UIView
 @end
+
 @interface CSCombinedListViewController : UIViewController
 @end
 
+// Version Neutral interfacing
 @interface UIViewController (Private)
 - (BOOL)_canShowWhileLocked;
 @end
 
-@interface SBUIProudLockIconView : UIView
+@interface SBUIProudLockIconView : UIView // iPhone X lock icon
 @end
 
-@interface CSPageControl : UIView
+@interface CSPageControl : UIView // Lockscreen Page dots
 @end
