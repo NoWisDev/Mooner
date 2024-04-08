@@ -39,8 +39,8 @@ func formatDate(pointInTime: Date) -> (LongDate: String, Time: String, AMPM: Str
 struct RootTimelineView: View {
     var body: some View {
         VStack {
-            TimelineView<EveryMinuteTimelineSchedule, TimeView>(.everyMinute) { context in
-                TimeView(date: context.date)
+            TimelineView<(PeriodicTimelineSchedule), TimeView>(.periodic(from: .now, by: 1.0)) { context in
+                TimeView(date: context.date) 
             }
         }
     }
