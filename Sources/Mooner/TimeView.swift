@@ -1,128 +1,120 @@
 import SwiftUI
 import MoonerC
 
-class BatteryLevelDetector: ObservableObject {
-    @Published var batteryLevel: Int = 0
-    @Published var isScreenLocked = false
+private final class BatteryLevelDetector: ObservableObject {
+    @Published private(set) var batteryLevel = 0
     init() {
         UIDevice.current.isBatteryMonitoringEnabled = true
-        self.batteryLevel = Int(UIDevice.current.batteryLevel * 100)
+        batteryLevel = Int(UIDevice.current.batteryLevel * 100)
         // Notification Observer
-        NotificationCenter.default.addObserver(self, selector: #selector(batteryLevelDidChange(notification:)), name: UIDevice.batteryLevelDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(batteryLevelDidChange), name: UIDevice.batteryLevelDidChangeNotification, object: nil)
     }
-    @objc func batteryLevelDidChange(notification: Notification) {
-        self.batteryLevel = Int(UIDevice.current.batteryLevel * 100)
+    @objc private func batteryLevelDidChange() {
+        batteryLevel = Int(UIDevice.current.batteryLevel * 100)
     }
-}
-
-func formatDate(pointInTime: Date) -> (LongDate: String, Time: String, AMPM: String) {
-    // LongDate
-    let longDateFormatter = DateFormatter()
-    longDateFormatter.dateFormat = userDateFormat
-    let LongDate: String = longDateFormatter.string(from: pointInTime)
-    // Time
-    let timeFormatter = DateFormatter()
-    timeFormatter.dateFormat = userTimeFormat
-    let Time: String = timeFormatter.string(from: pointInTime)
-    // AM/PM
-    var ampmFormat = "a"
-    if isShowAMPMEnabled == false {
-        ampmFormat = ""
-    }
-    let ampmFormatter = DateFormatter()
-    ampmFormatter.dateFormat = ampmFormat
-    let AMPM: String = ampmFormatter.string(from: pointInTime)
-
-    return (LongDate, Time, AMPM)
 }
 
 struct RootTimelineView: View {
     var body: some View {
         VStack {
             TimelineView<(PeriodicTimelineSchedule), TimeView>(.periodic(from: .now, by: 1.0)) { context in
-                TimeView(date: context.date) 
+                TimeView(date: context.date)
             }
         }
     }
 }
 
-struct TimeView: View {
+private struct TimeView: View {
     let date: Date
-    @ObservedObject var batteryLevelDetector = BatteryLevelDetector()
-    let secondaryColor = Color(red:0.85, green:0.85, blue:0.85)
-    let secondaryOpacity = 0.9
-    let secondaryBlur: Material = .thickMaterial
-    @State var islsMainView = isLSMainView
+
+    @State private var islsMainView = isLSMainView
+    @StateObject private var batteryLevelDetector = BatteryLevelDetector()
 
     var body: some View {
-        if islsMainView == true {
-            let (LongDate, Time, AMPM) = formatDate(pointInTime: date)
+        if islsMainView {
             let lsAlignment: HorizontalAlignment = {
-                if lockscreenAlignment == 0 {
-                    return .leading
-                } else if lockscreenAlignment == 1 {
-                    return .center
-                } else {
-                    return .trailing
+                switch lockscreenAlignment {
+                    case 0: return .leading
+                    case 1: return .center
+                    case 2: return .trailing
+                    default: return .leading
                 }
             }()
 
             HStack {
-                if lockscreenAlignment == 2 {
-                    Spacer()
-                }
                 VStack(alignment: lsAlignment) {
-                    if isDayNightIconEnabled == false {
-                        Text("\(LongDate)")
-                            .font(.system(size: 25, weight: .semibold, design: .rounded))
-                            .opacity(secondaryOpacity)
-                            .foregroundColor(secondaryColor)
-                            .foregroundStyle(secondaryBlur)
-                    } else if lockscreenAlignment != 2 {
-                        Text("\(LongDate) \(Image(systemName: "sun.max.fill"))")
-                            .font(.system(size: 25, weight: .semibold, design: .rounded))
-                            .opacity(secondaryOpacity)
-                            .foregroundColor(secondaryColor)
-                            .foregroundStyle(secondaryBlur)
-                    } else {
-                        Text("\(Image(systemName: "sun.max.fill")) \(LongDate)")
-                        .font(.system(size: 25, weight: .semibold, design: .rounded))
-                        .opacity(secondaryOpacity)
-                        .foregroundColor(secondaryColor)
-                        .foregroundStyle(secondaryBlur)
-                    }
-                    HStack(alignment: .lastTextBaseline) {
-                        if lockscreenAlignment != 2 {
-                            Text("\(Time)")
-                                .font(.system(size: 60, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                        }
-                        Text("\(AMPM)")
-                            .font(.system(size: 35, weight: .semibold, design: .rounded))
-                            .opacity(secondaryOpacity)
-                            .foregroundColor(secondaryColor)
-                            .foregroundStyle(secondaryBlur)
+                    Group {
+                        let longDateString = format(date: date, withFormat: userDateFormat ?? "")
+                        let sunTextString: LocalizedStringKey = isDayNightIconEnabled == true ? "\(Image(systemName: "sun.max.fill")) \(longDateString)" : LocalizedStringKey(longDateString)
+                        let textSunString: LocalizedStringKey = isDayNightIconEnabled == true ? "\(longDateString) \(Image(systemName: "sun.max.fill"))" : LocalizedStringKey(longDateString)
+
                         if lockscreenAlignment == 2 {
-                            Text("\(Time)")
-                                .font(.system(size: 60, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
+                            Text(sunTextString)
+
+                        } else {
+                            Text(textSunString)
                         }
-                        
+                    }
+                    .font(.system(size: 25, weight: .semibold, design: .rounded))
+                    .styleModifier()
+
+                    HStack(alignment: .lastTextBaseline) {
+                        let amPMFormat = isShowAMPMEnabled == true ? "a" : ""
+                        let amPMString = format(date: date, withFormat: amPMFormat)
+
+                        if lockscreenAlignment != 2 {
+                            TimeText()
+                        }
+                        Text(amPMString)
+                            .font(.system(size: 35, weight: .semibold, design: .rounded))
+                            .styleModifier()
+                        if lockscreenAlignment == 2 {
+                            TimeText()
+                        }
                     }
                     Text("Battery Percentage: \(batteryLevelDetector.batteryLevel)%")
                         .font(.system(size: 25, weight: .semibold, design: .rounded))
-                        .opacity(secondaryOpacity)
-                        .foregroundColor(secondaryColor)
-                        .foregroundStyle(secondaryBlur)
+                        .styleModifier()
                     Spacer()
                 }
                 .padding(.top, 30)
                 .padding(.horizontal, 15)
-                if lockscreenAlignment == 0 {
-                    Spacer()
-                }
             }
             .environment(\.layoutDirection, .leftToRight)
+            .frame(
+                maxWidth: .infinity,
+                alignment: lockscreenAlignment == 0 ? .leading : lockscreenAlignment == 2 ? .trailing : .center
+            )
         }
+    }
+
+    @ViewBuilder
+    private func TimeText() -> some View {
+        let timeString = format(date: date, withFormat: userTimeFormat ?? "")
+
+        Text(timeString)
+            .font(.system(size: 60, weight: .bold, design: .rounded))
+            .foregroundColor(.white)
+    }
+
+    private func format(date: Date, withFormat format: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        return formatter.string(from: date)
+    }
+}
+
+private struct StyleModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .opacity(0.9)
+            .foregroundColor(Color(red:0.85, green:0.85, blue:0.85))
+            .foregroundStyle(.thickMaterial)
+    }
+}
+
+private extension View {
+    func styleModifier() -> some View {
+        modifier(StyleModifier())
     }
 }
